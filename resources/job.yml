@@ -1,0 +1,98 @@
+# The main job for dab_default_python_test.
+resources:
+  jobs:
+    data_pipeline_job:
+      name: data_pipeline_job
+
+      # schedule:
+      #   # Run every day at 8:37 AM
+      #   quartz_cron_expression: '44 37 8 * * ?'
+      #   timezone_id: Europe/Amsterdam
+
+      email_notifications:
+        on_failure:
+          - your.email@gmail.com
+
+      tasks:
+        
+        - task_key: data_pipeline_task
+          # depends_on:
+          #   - task_key: none
+          job_cluster_key: data_pipeline_job_cluster
+          python_wheel_task:
+            package_name: databricks_dab_demo
+            entry_point: data_pipeline
+          libraries:
+            # By default we just include the .whl file generated for the dab_default_python_test package.
+            # See https://docs.databricks.com/dev-tools/bundles/library-dependencies.html
+            # for more information on how to add other libraries.
+            - whl: ../dist/*.whl
+            # - pypi:
+            #     package: torchsummary==1.5.1    
+
+      job_clusters:
+        - job_cluster_key: data_pipeline_job_cluster
+          new_cluster:
+            spark_version: 15.1.x-cpu-ml-scala2.12 # if CPU cluster
+            node_type_id: Standard_F8 # Standard_D3_v2 # if CPU cluster
+            # spark_version: 15.1.x-gpu-ml-scala2.12 # if GPU cluster
+            # node_type_id: Standard_NC4as_T4_v3 # if GPU cluster            
+            num_workers: 0 # if not autoscaling
+            # autoscale: # if autoscaling
+            #     min_workers: 1
+            #     max_workers: 1    
+
+    train_job:
+      name: train_job
+
+      # schedule:
+      #   # Run every day at 8:37 AM
+      #   quartz_cron_expression: '44 37 8 * * ?'
+      #   timezone_id: Europe/Amsterdam
+
+      email_notifications:
+        on_failure:
+          - your.email@gmail.com
+
+      tasks:
+        # - task_key: notebook_task
+        #   job_cluster_key: job_cluster
+        #   notebook_task:
+        #     notebook_path: ../src/notebook.ipynb
+        
+        # - task_key: refresh_pipeline
+        #   depends_on:
+        #     - task_key: notebook_task
+        #   pipeline_task:
+        #     pipeline_id: ${resources.pipelines.dab_default_python_test_pipeline.id}
+        
+        - task_key: train_task
+          # depends_on:
+          #   - task_key: refresh_pipeline
+          job_cluster_key: training_job_cluster
+          python_wheel_task:
+            package_name: databricks_dab_demo
+            entry_point: train
+          libraries:
+            # By default we just include the .whl file generated for the dab_default_python_test package.
+            # See https://docs.databricks.com/dev-tools/bundles/library-dependencies.html
+            # for more information on how to add other libraries.
+            - whl: ../dist/*.whl
+            - pypi:
+                package: torchsummary==1.5.1         
+            - pypi:
+                package: torchmetrics==0.8.2               
+            - pypi:
+                package: torchinfo==1.8.0                
+
+      job_clusters:    
+        - job_cluster_key: training_job_cluster
+          new_cluster:
+            # spark_version: 15.1.x-cpu-ml-scala2.12 # if CPU cluster
+            # node_type_id: Standard_D3_v2 # if CPU cluster
+            spark_version: 15.1.x-gpu-ml-scala2.12 # if GPU cluster
+            node_type_id: Standard_NC4as_T4_v3 # if GPU cluster
+            num_workers: 0 # if not autoscaling
+            # autoscale: # if autoscaling
+            #     min_workers: 1
+            #     max_workers: 1

@@ -1,0 +1,39 @@
+# The name of the bundle. run `databricks bundle schema` to see the full bundle settings schema.
+bundle:
+  name: databricks-dab-demo
+
+# variables:
+#   experiment_name:
+#     description: Experiment name for the model training.
+#     default: /Users/${workspace.current_user.userName}/${bundle.target}-databricks-dab-demo-experiment
+#   model_name:
+#     description: Model name for the model training.
+#     default: databricks-dab-demo-model
+
+include:
+  # Resources folder contains ML artifact resources for the ML project that defines model and experiment
+  # And workflows resources for the ML project including model training -> validation -> deployment,
+  # batch inference, data monitoring, metric refresh, alerts and triggering retraining
+  - ./resources/*.yml
+
+# Deployment Target specific values for workspace
+targets:
+  dev:  # UC Catalog Name 
+    default: true
+    workspace:
+      host: https://adb-1400981482943321.1.azuredatabricks.net
+      root_path: /Shared/.bundle/dev/${bundle.name}
+
+
+  staging:
+    workspace:
+      host: https://adb-1400981482943321.1.azuredatabricks.net
+
+  prod:
+    workspace:
+      host: https://adb-1400981482943321.1.azuredatabricks.net
+
+  test:
+    workspace:
+      host: https://adb-1400981482943321.1.azuredatabricks.net
+
