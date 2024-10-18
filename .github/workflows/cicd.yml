@@ -1,0 +1,49 @@
+name: CICD Workflow
+
+on:
+  push:
+    branches:
+      - 'feature/**'  # Runs build job on any feature/* branch push
+  pull_request:
+    branches:
+      - main  # Runs build, test, and deploy jobs on pull request to main branch
+
+jobs:
+  build:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build Project
+        run: echo "Building the project..."
+
+  test:
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Tests
+        run: echo "Running tests..."
+
+  deploy-dev:
+    if: github.event_name == 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+    steps:
+      - name: Deploy
+        run: echo "Deploying..."
+
+  deploy-production:
+    if: github.event_name == 'pull_request'
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      # Requires approval for 'production' environment
+    steps:
+      - name: Deploy
+        run: echo "Deploying..."        
