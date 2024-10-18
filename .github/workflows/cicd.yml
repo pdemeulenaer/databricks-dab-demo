@@ -3,6 +3,7 @@ name: CICD Workflow
 on:
   push:
     branches:
+      - main
       - 'feature/**'  # Runs build job on any feature/* branch push
     paths:
       - 'src/**'
