@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - 'feature/**'  # Runs build job on any feature/* branch push
+    paths:
+      - 'src/**'
+      - '.github/workflows/**'
+      - 'databricks.yml'
+      - 'resources/*.yml'
+      - 'requirements*'
+      - 'setup.py'      
   pull_request:
     branches:
       - main  # Runs build, test, and deploy jobs on pull request to main branch
