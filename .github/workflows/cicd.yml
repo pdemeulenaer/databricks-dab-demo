@@ -16,10 +16,19 @@ on:
     branches:
       - main  # Runs build, test, and deploy jobs on pull request to main branch
 
+env:
+  MAJOR_VERSION: 1
+  MINOR_VERSION: 0
+  # FEATURE_NAME: 'databricks-dab-demo'
+  # OUTPUT_FOLDER: 'databricks-dab-demo'
+  # CONDA_ENV_NAME: 'databricks-dab-demo'
+
 jobs:
   build:
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    environment:
+      name: development  # Use dev environment for build and validation
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -47,6 +56,15 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
           databricks version
 
+      - name: Configure Databricks CLI
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks configure --token
+          echo "DATABRICKS_HOST=$DATABRICKS_HOST" >> $GITHUB_ENV
+          echo "DATABRICKS_TOKEN=$DATABRICKS_TOKEN" >> $GITHUB_ENV
+
       - name: Validate bundle
         run: make validate-bundle          
 
@@ -54,6 +72,8 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: development
     steps:
       - name: Run Tests
         run: echo "Running tests..."
