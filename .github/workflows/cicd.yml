@@ -56,16 +56,6 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
           databricks version
 
-      # - name: Configure Databricks CLI
-      #   env:
-      #     DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-      #     DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-      #   run: |
-      #     databricks configure --token <<EOF
-      #     $DATABRICKS_HOST
-      #     $DATABRICKS_TOKEN
-      #     EOF
-
       # List the databricks repos within the workspace whose credentials
       # are stored in the Github Environment "my-environment"
       - name: List databricks repos
