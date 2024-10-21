@@ -62,7 +62,8 @@ jobs:
           # while the token is a "secret" in the Github Environment
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}      
-        run: make validate-bundle          
+        # run: make validate-bundle  
+        run: databricks bundle deploy -t dev        
 
   # test:
   #   if: github.event_name == 'pull_request'
