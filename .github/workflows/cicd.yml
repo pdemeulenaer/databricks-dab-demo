@@ -56,17 +56,6 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
           databricks version
 
-      # List the databricks repos within the workspace whose credentials
-      # are stored in the Github Environment "my-environment"
-      - name: List databricks repos
-        env:
-          # Note the host is an "environment variable" in the Github Environment
-          # while the token is a "secret" in the Github Environment
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          databricks repos list
-
       - name: Validate bundle
         env:
           # Note the host is an "environment variable" in the Github Environment
