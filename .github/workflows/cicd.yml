@@ -75,33 +75,42 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}      
         run: make validate-bundle          
 
-  test:
-    if: github.event_name == 'pull_request'
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: development
-    steps:
-      - name: Run Tests
-        run: echo "Running tests..."
+  # test:
+  #   if: github.event_name == 'pull_request'
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: development
+  #   steps:
+  #     - name: Run Tests
+  #       run: echo "Running tests..."
 
-  deploy-dev:
-    if: github.event_name == 'pull_request'
-    needs: test
-    runs-on: ubuntu-latest
-    environment:
-      name: development
-    steps:
-      - name: Deploy
-        run: echo "Deploying..."
+  # deploy-dev:
+  #   if: github.event_name == 'pull_request'
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: development
+  #   steps:
+  #     - name: Deploy
+  #       run: echo "Deploying..."
 
   deploy-production:
     if: github.event_name == 'pull_request'
-    needs: deploy-dev
+    needs: build #deploy-dev
     runs-on: ubuntu-latest
     environment:
       name: production
       # Requires approval for 'production' environment
     steps:
       - name: Deploy
-        run: echo "Deploying..."        
+        run: echo "Deploying..."  
+        
+      - name: Deploy bundle to dev
+        env:
+          # Note the host is an "environment variable" in the Github Environment
+          # while the token is a "secret" in the Github Environment
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}      
+        run: make deploy-bundle  
+       
