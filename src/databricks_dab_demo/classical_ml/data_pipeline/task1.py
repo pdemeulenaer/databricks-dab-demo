@@ -36,7 +36,7 @@ def main():
         data_dir = "/Volumes/responseosdev_catalog/volumes/databricks_dab_demo_volume"
     else:
         # else read input data from package
-        data_dir = os.path.join(package_dir,"classical_ml")
+        data_dir = os.path.join(package_dir, "classical_ml")
 
     # Load the Iris dataset
     iris = load_iris()

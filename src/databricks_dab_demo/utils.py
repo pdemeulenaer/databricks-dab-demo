@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any, Tuple
 import logging
 from typing import Union, Dict
 from datasets import Dataset
+
 # import torch
 import yaml  # type: ignore
 import mlflow  # type: ignore
@@ -28,7 +29,7 @@ def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
         The characters replaced with underscores are: space, comma, semicolon,
         curly braces, parentheses, newline, tab, and equals sign.
     """
-    return df.rename(columns=lambda x: re.sub(r'[ ,;{}()\n\t=]', '_', x).strip('_'))
+    return df.rename(columns=lambda x: re.sub(r"[ ,;{}()\n\t=]", "_", x).strip("_"))
 
 
 def load_parameters(path: Optional[str] = None) -> Dict[str, Any]:
@@ -112,7 +113,7 @@ def runs_on_databricks() -> bool:
         dbutils = get_dbutils()
         return "DATABRICKS_RUNTIME_VERSION" in os.environ
     except ImportError:
-        return False  
+        return False
 
 
 def set_vars() -> None:
@@ -137,11 +138,11 @@ def set_vars() -> None:
         ImportError: If running locally and python-dotenv is not installed.
 
     Note:
-        - The function uses the `runs_on_databricks()` function to determine the 
+        - The function uses the `runs_on_databricks()` function to determine the
           execution environment.
-        - When running on Databricks, it uses the `dbutils` object to access 
+        - When running on Databricks, it uses the `dbutils` object to access
           secrets from the "responseos" scope.
-        - When running locally, it requires the python-dotenv package to be 
+        - When running locally, it requires the python-dotenv package to be
           installed and a .env file to be present in the working directory.
     """
     if runs_on_databricks():
@@ -156,10 +157,13 @@ def set_vars() -> None:
         print("Running locally on Python")
         try:
             from dotenv import load_dotenv
+
             load_dotenv()
         except ImportError:
-            raise ImportError("python-dotenv is required to run this function locally. "
-                              "Please install it using 'pip install python-dotenv'.")
+            raise ImportError(
+                "python-dotenv is required to run this function locally. "
+                "Please install it using 'pip install python-dotenv'."
+            )
 
 
 def write_df_to_unity_catalog(df: pd.DataFrame, catalog: str, schema: str, table: str, mode: str = "overwrite") -> int:
@@ -195,7 +199,7 @@ def write_df_to_unity_catalog(df: pd.DataFrame, catalog: str, schema: str, table
         print("Not running on Databricks. No action taken.")
         return -1
 
-    if mode not in ['overwrite', 'append']:
+    if mode not in ["overwrite", "append"]:
         raise ValueError("Mode must be either 'overwrite' or 'append'")
 
     try:
@@ -215,7 +219,7 @@ def write_df_to_unity_catalog(df: pd.DataFrame, catalog: str, schema: str, table
 
         # Get the version number of the Delta table
         delta_table = DeltaTable.forName(spark, table_path)
-        version = delta_table.history().first().version        
+        version = delta_table.history().first().version
 
         print(f"Data successfully written to {table_path}")
         return version
@@ -279,7 +283,7 @@ def read_unity_catalog_to_pandas(catalog: str, schema: str, table: str) -> Tuple
 
     except Exception as e:
         print(f"Error reading Delta table from Unity Catalog: {str(e)}")
-        return pd.DataFrame(), -1       
+        return pd.DataFrame(), -1
 
 
 def get_latest_mlflow_run_id(experiment_name: str) -> int:
@@ -308,7 +312,7 @@ def get_latest_mlflow_run_id(experiment_name: str) -> int:
     # Retrieve the experiment
     experiment = mlflow.get_experiment_by_name(experiment_name)
     if experiment is None:
-        raise ValueError(f"Experiment '{experiment_name}' not found.")    
+        raise ValueError(f"Experiment '{experiment_name}' not found.")
 
     # Get the latest run in the experiment
     client = MlflowClient()
@@ -328,9 +332,7 @@ def get_latest_mlflow_run_id(experiment_name: str) -> int:
 
 
 def download_latest_mlflow_run(
-    experiment_name: str,
-    mlflow_artifacts_dir: str = "./mlflow_artifacts",
-    model_name: str = "bert-base-uncased"
+    experiment_name: str, mlflow_artifacts_dir: str = "./mlflow_artifacts", model_name: str = "bert-base-uncased"
 ) -> Union[str, int]:
     """
     Download artifacts from the latest MLflow run for a given experiment.
@@ -418,4 +420,4 @@ def display_table(dataset_or_sample: Union[Dict, Dataset]) -> None:
         df = pd.DataFrame(dataset_or_sample, index=[0])
     else:
         df = pd.DataFrame(dataset_or_sample)
-    print(df.head(5))  
+    print(df.head(5))

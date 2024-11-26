@@ -1,17 +1,19 @@
 from setuptools import setup, find_packages, find_namespace_packages
+
 # import codecs
 import sys
+
 sys.path.append("./src")
 import datetime
 import databricks_dab_demo
 
 
 setup(
-    name='databricks_dab_demo',
+    name="databricks_dab_demo",
     version=databricks_dab_demo.__version__ + "+" + datetime.datetime.utcnow().strftime("%Y%m%d.%H%M%S"),
     url="https://databricks.com",
-    author="Northell",
-    author_email="philippe.demeulenaer@northell.com",
+    author="Philippe de Meulenaer",
+    author_email="pdemeulenaer@gmail.com",
     description="wheel file based on databricks-dab-demo/src",
     packages=find_packages(where="./src"),
     package_dir={"": "src"},

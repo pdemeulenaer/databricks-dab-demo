@@ -9,10 +9,10 @@ import mlflow.sklearn
 from mlflow.models.signature import infer_signature
 
 from databricks_dab_demo.utils import (
-    set_vars, 
-    runs_on_databricks, 
-    load_parameters, 
-    write_df_to_unity_catalog, 
+    set_vars,
+    runs_on_databricks,
+    load_parameters,
+    write_df_to_unity_catalog,
     read_unity_catalog_to_pandas,
 )
 
@@ -37,7 +37,7 @@ def main():
         data_dir = "/Volumes/responseosdev_catalog/volumes/databricks_dab_demo_volume"
     else:
         # else read input data from package
-        data_dir = os.path.join(package_dir,"classical_ml")
+        data_dir = os.path.join(package_dir, "classical_ml")
 
     # Set the MLflow experiment name
     experiment_name = parameters["training"]["experiment_name"]
