@@ -42,20 +42,20 @@ quality-ci: lint test
 # 1.1 Local commands to run the DATA pipeline
 
 data-extraction:
-	python -m src.databricks_dab_demo.data_pipeline.task1
+	python -m src.databricks_dab_demo.classical_ml.data_pipeline.task1
 
 data-visualization:
-	python -m src.databricks_dab_demo.data_pipeline.task2
+	python -m src.databricks_dab_demo.classical_ml.data_pipeline.task2
 
 run-data-pipeline: data-extraction data-visualization	
 
 # 1.2 Local commands to run the ML pipeline
 
 train:
-	python -m src.databricks_dab_demo.model.train		
+	python -m src.databricks_dab_demo.classical_ml.model.train		
 
 evaluate:
-	python -m src.databricks_dab_demo.model.evaluate	
+	python -m src.databricks_dab_demo.classical_ml.model.evaluate	
 
 run-ml-pipeline: train evaluate		
 
