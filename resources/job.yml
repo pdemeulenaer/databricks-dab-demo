@@ -8,7 +8,7 @@ resources:
       permissions:
         - group_name: users
           level: CAN_VIEW   
-        - user_name: philippe.demeulenaer@northell.com
+        - user_name: pdemeulenaer@gmail.com
           level: CAN_MANAGE                                  
 
       # schedule:
@@ -18,7 +18,7 @@ resources:
 
       email_notifications:
         on_failure:         
-          - philippe.demeulenaer@northell.com
+          - pdemeulenaer@gmail.com
 
       tasks:        
         - task_key: data_extraction_task
@@ -26,7 +26,7 @@ resources:
           python_wheel_task:
             package_name: databricks_dab_demo
             entry_point: data_extraction
-          timeout_seconds: 3600,               
+          timeout_seconds: 3600               
           libraries:
             - whl: ../dist/*.whl
             # - pypi:
@@ -39,7 +39,7 @@ resources:
           python_wheel_task:
             package_name: databricks_dab_demo
             entry_point: data_visualization
-          timeout_seconds: 3600,               
+          timeout_seconds: 3600              
           libraries:
             - whl: ../dist/*.whl
             # - pypi:
@@ -49,9 +49,9 @@ resources:
         - job_cluster_key: data_pipeline_job_cluster
           new_cluster:
             # CPU cluster Pool
-            instance_pool_id: 0906-065954-veld18-pool-kmxexacu # tiny instance
+            instance_pool_id: 1126-141115-ailed327-pool-4fpbvt81 # tiny instance
             # instance_pool_id: 0822-095303-plait752-pool-as5pr5bi # F8 instance
-            spark_version: 15.4.x-cpu-ml-scala2.12    
+            spark_version: 16.0-cpu-ml-scala2.12    
             spark_conf: # remove if not needed
               # spark.databricks.delta.preview.enabled: "true" 
               spark.master: "local[*, 4]" # Spark working in local mode!
@@ -66,7 +66,7 @@ resources:
       permissions:
         - group_name: users
           level: CAN_VIEW   
-        - user_name: philippe.demeulenaer@northell.com
+        - user_name: pdemeulenaer@gmail.com
           level: CAN_MANAGE                                  
 
       # schedule:
@@ -76,7 +76,7 @@ resources:
 
       email_notifications:
         on_failure:         
-          - philippe.demeulenaer@northell.com
+          - pdemeulenaer@gmail.com
 
       tasks:        
         - task_key: train_task
@@ -84,7 +84,7 @@ resources:
           python_wheel_task:
             package_name: databricks_dab_demo
             entry_point: training
-          timeout_seconds: 3600,               
+          timeout_seconds: 3600              
           libraries:
             - whl: ../dist/*.whl
             # - pypi:
@@ -97,7 +97,7 @@ resources:
           python_wheel_task:
             package_name: databricks_dab_demo
             entry_point: evaluation
-          timeout_seconds: 3600,              
+          timeout_seconds: 3600              
           libraries:
             - whl: ../dist/*.whl
             # - pypi:
@@ -107,9 +107,9 @@ resources:
         - job_cluster_key: ml_pipeline_job_cluster
           new_cluster:
             # CPU cluster Pool
-            instance_pool_id: 0906-065954-veld18-pool-kmxexacu # tiny instance
+            instance_pool_id: 1126-141115-ailed327-pool-4fpbvt81 # tiny instance
             # instance_pool_id: 0822-095303-plait752-pool-as5pr5bi # F8 instance
-            spark_version: 15.4.x-cpu-ml-scala2.12  
+            spark_version: 16.0-cpu-ml-scala2.12  
             spark_conf: # remove if not needed
               # spark.databricks.delta.preview.enabled: "true" 
               spark.master: "local[*, 4]" # Spark working in local mode!                               
