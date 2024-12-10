@@ -2,13 +2,13 @@
 resources:
   jobs:
 
-    data_pipeline_job:
-      name: data_pipeline_job
+    dab_demo_data_pipeline_job:
+      name: dab_demo_data_pipeline_job
 
       permissions:
         - group_name: users
           level: CAN_VIEW   
-        - user_name: pdemeulenaer@gmail.com
+        - user_name: pdemeulenaer@outlook.com
           level: CAN_MANAGE                                  
 
       # schedule:
@@ -18,7 +18,7 @@ resources:
 
       email_notifications:
         on_failure:         
-          - pdemeulenaer@gmail.com
+          - pdemeulenaer@outlook.com
 
       tasks:        
         - task_key: data_extraction_task
@@ -49,9 +49,8 @@ resources:
         - job_cluster_key: data_pipeline_job_cluster
           new_cluster:
             # CPU cluster Pool
-            instance_pool_id: 1126-141115-ailed327-pool-4fpbvt81 # tiny instance
-            # instance_pool_id: 0822-095303-plait752-pool-as5pr5bi # F8 instance
-            spark_version: 16.0-cpu-ml-scala2.12    
+            instance_pool_id: 1129-114522-inert521-pool-dehl6i0i # tiny instance
+            spark_version: 15.4.x-cpu-ml-scala2.12      
             spark_conf: # remove if not needed
               # spark.databricks.delta.preview.enabled: "true" 
               spark.master: "local[*, 4]" # Spark working in local mode!
@@ -60,13 +59,13 @@ resources:
               max_workers: 0   
 
 
-    ml_pipeline_job:
-      name: ml_pipeline_job
+    dab_demo_ml_pipeline_job:
+      name: dab_demo_ml_pipeline_job
 
       permissions:
         - group_name: users
           level: CAN_VIEW   
-        - user_name: pdemeulenaer@gmail.com
+        - user_name: pdemeulenaer@outlook.com
           level: CAN_MANAGE                                  
 
       # schedule:
@@ -76,7 +75,7 @@ resources:
 
       email_notifications:
         on_failure:         
-          - pdemeulenaer@gmail.com
+          - pdemeulenaer@outlook.com
 
       tasks:        
         - task_key: train_task
@@ -107,9 +106,8 @@ resources:
         - job_cluster_key: ml_pipeline_job_cluster
           new_cluster:
             # CPU cluster Pool
-            instance_pool_id: 1126-141115-ailed327-pool-4fpbvt81 # tiny instance
-            # instance_pool_id: 0822-095303-plait752-pool-as5pr5bi # F8 instance
-            spark_version: 16.0-cpu-ml-scala2.12  
+            instance_pool_id: 1129-114522-inert521-pool-dehl6i0i # tiny instance
+            spark_version: 15.4.x-cpu-ml-scala2.12   
             spark_conf: # remove if not needed
               # spark.databricks.delta.preview.enabled: "true" 
               spark.master: "local[*, 4]" # Spark working in local mode!                               
