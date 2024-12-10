@@ -63,11 +63,13 @@ run-ml-pipeline: train evaluate
 
 # 2. The following commands are meant to deploy & run the package to Databricks
 
-deploy-bundle:
+deploy:
 	databricks bundle deploy -t dev
+#	databricks bundle deploy
 
-validate-bundle:
-	databricks bundle validate -t dev	
+validate:
+	databricks bundle validate -t dev
+#	databricks bundle validate	
 
 run-dbx-data-pipeline-dev:
 	databricks bundle run -t dev data_pipeline_job
