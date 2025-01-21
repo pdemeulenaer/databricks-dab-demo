@@ -4,7 +4,7 @@ import importlib.resources as pkg_resources
 import pandas as pd
 
 from databricks_dab_demo.utils import set_vars, runs_on_databricks, load_parameters
-from databricks_dab_demo.data_pipeline.utils import make_visualisation
+from databricks_dab_demo.classical_ml.data_pipeline.utils import make_visualisation
 
 set_vars()
 is_databricks = runs_on_databricks()
