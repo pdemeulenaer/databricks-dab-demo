@@ -145,6 +145,11 @@ cython_debug/
 *.pt 
 *.pth
 
+# VScode
+.vscode/
+.vscode/*
+.vscode/settings.json
+
 # Databricks
 .databricks
 */mlflow_artifacts/*/**
