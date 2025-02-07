@@ -20,7 +20,7 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://adb-3982051809887932.12.azuredatabricks.net/ #https://adb-8568615994068127.7.azuredatabricks.net/
+      host: https://adb-1653927558340334.14.azuredatabricks.net/ #https://adb-8568615994068127.7.azuredatabricks.net/
       # root path will be user's own folder 
 
   # The 'staging' target, used for production-like (testing) deployment.
@@ -29,7 +29,7 @@ targets:
     # Doing so enables strict verification of the settings below.
     mode: production
     workspace:
-      host: https://adb-3982051809887932.12.azuredatabricks.net/ #https://adb-8568615994068127.7.azuredatabricks.net/
+      host: https://adb-1653927558340334.14.azuredatabricks.net/ #https://adb-8568615994068127.7.azuredatabricks.net/
       # We always use /Shared/.bundle/staging for all resources to make sure we only have a single copy.
       # If this path results in an error, please make sure you have a recent version of the CLI installed.
       root_path: /Shared/.bundle/staging/${bundle.name}
@@ -52,3 +52,9 @@ targets:
   #     # This runs as pdemeulenaer@outlook.com in production. We could also use a service principal here,
   #     # see https://docs.databricks.com/dev-tools/bundles/permissions.html.
   #     user_name: pdemeulenaer@outlook.com
+
+artifacts:
+  default:
+    type: whl
+    build: poetry build
+    path: .  
