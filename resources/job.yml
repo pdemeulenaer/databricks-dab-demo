@@ -49,8 +49,8 @@ resources:
         - job_cluster_key: data_pipeline_job_cluster
           new_cluster:
             # CPU cluster Pool
-            instance_pool_id: 1129-114522-inert521-pool-dehl6i0i # tiny instance
-            spark_version: 15.4.x-cpu-ml-scala2.12      
+            instance_pool_id: 0207-064448-gyro50-pool-qqu31t4i # tiny instance
+            spark_version: 16.1.x-cpu-ml-scala2.12      
             spark_conf: # remove if not needed
               # spark.databricks.delta.preview.enabled: "true" 
               spark.master: "local[*, 4]" # Spark working in local mode!
@@ -107,8 +107,8 @@ resources:
         - job_cluster_key: ml_pipeline_job_cluster
           new_cluster:
             # CPU cluster Pool
-            instance_pool_id: 1129-114522-inert521-pool-dehl6i0i # tiny instance
-            spark_version: 15.4.x-cpu-ml-scala2.12   
+            instance_pool_id: 0207-064448-gyro50-pool-qqu31t4i # tiny instance
+            spark_version: 16.1.x-cpu-ml-scala2.12   
             spark_conf: # remove if not needed
               # spark.databricks.delta.preview.enabled: "true" 
               spark.master: "local[*, 4]" # Spark working in local mode!                               
