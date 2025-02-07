@@ -14,7 +14,7 @@ authors = [
     {name = "pdemeulenaer",email = "pdemeulenaer@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 dependencies = [
     "python-dotenv (==1.0.1)",
     "black (==24.4.2)",
@@ -31,13 +31,16 @@ dependencies = [
     "matplotlib (==3.9.2)",
     "mlflow (==2.16.2)",
     "datasets (==3.2.0)",
-    "databricks-connect (==13.3.2)"
+    "databricks-connect (==13.3.2)",
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
 
 [tool.poetry.scripts]
 data_extraction="databricks_dab_demo.data_pipeline.task1:main"
