@@ -28,7 +28,7 @@ def main():
     print(package_dir)
 
     # Read the yaml configuration file
-    config_file_path = os.path.join(package_dir, "classical_ml/config.yaml")
+    config_file_path = os.path.join(package_dir, "config.yaml")
     parameters = load_parameters(config_file_path)
     print(parameters)
 
@@ -37,7 +37,8 @@ def main():
         data_dir = "/Volumes/responseosdev_catalog/volumes/databricks_dab_demo_volume"
     else:
         # else read input data from package
-        data_dir = os.path.join(package_dir, "classical_ml")
+        # data_dir = os.path.join(package_dir, "classical_ml")
+        data_dir = package_dir
 
     # Set the MLflow experiment name
     experiment_name = parameters["training"]["experiment_name"]

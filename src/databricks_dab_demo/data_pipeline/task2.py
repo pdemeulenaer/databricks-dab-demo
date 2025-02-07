@@ -4,7 +4,7 @@ import importlib.resources as pkg_resources
 import pandas as pd
 
 from databricks_dab_demo.utils import set_vars, runs_on_databricks, load_parameters
-from databricks_dab_demo.classical_ml.data_pipeline.utils import make_visualisation
+from databricks_dab_demo.data_pipeline.utils import make_visualisation
 
 set_vars()
 is_databricks = runs_on_databricks()
@@ -18,7 +18,7 @@ def main():
     print(package_dir)
 
     # Read the yaml configuration file
-    config_file_path = os.path.join(package_dir, "classical_ml/config.yaml")
+    config_file_path = os.path.join(package_dir, "config.yaml")
     parameters = load_parameters(config_file_path)
     print(parameters)
 
@@ -27,7 +27,8 @@ def main():
         data_dir = "/Volumes/responseosdev_catalog/volumes/databricks_dab_demo_volume"
     else:
         # else read input data from package
-        data_dir = os.path.join(package_dir, "classical_ml")
+        # data_dir = os.path.join(package_dir, "classical_ml")
+        data_dir = package_dir
 
     # Load the original and generated data from CSV files
     input_dir = os.path.join(data_dir, parameters["data_pipeline"]["data"]["input_dir"])
