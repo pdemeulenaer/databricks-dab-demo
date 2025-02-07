@@ -2,6 +2,13 @@
 bundle:
   name: databricks_dab_demo
 
+# This block is only necessary if the bundle makes use of Poetry for Python package management.
+artifacts:
+  default:
+    type: whl
+    build: poetry build
+    path: .    
+
 include:
   # Resources folder contains ML artifact resources for the ML project that defines model and experiment
   # And workflows resources for the ML project including model training -> validation -> deployment,
@@ -53,8 +60,4 @@ targets:
   #     # see https://docs.databricks.com/dev-tools/bundles/permissions.html.
   #     user_name: pdemeulenaer@outlook.com
 
-artifacts:
-  default:
-    type: whl
-    build: poetry build
-    path: .  
+

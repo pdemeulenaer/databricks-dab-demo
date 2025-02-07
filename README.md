@@ -66,6 +66,8 @@ $ make run-data-pipeline
 
 **The Machine Learning pipeline**: 
 
+This code makes use of Databricks Asset Bundles (DAB) to deploy any locally developped code as a package on a target databricks workspace, following the [Databricks documentation](https://docs.databricks.com/en/dev-tools/bundles/python-wheel.html)
+
 The ML pipeline again consists of 2 tasks: 
 
 * First task creates a Random Forest classifier (Scikit-learn) on the dataset and logs the model to MLflow Tracking as an experiment
@@ -108,6 +110,22 @@ $ make run-dbx-ml-pipeline-dev
 ```
 
 The execution logs can be observed in the Databricks Workflows UI. 
+
+
+## Converting the template to Poetry
+
+Essentially, follow the instructions in [Databricks documention for DAB](https://docs.databricks.com/en/dev-tools/bundles/python-wheel.html#step-4-update-the-projects-bundle-to-use-poetry)
+
+The structure of the repo should follow something like this:
+
+├── src
+│     └── my_package
+│           ├── __init__.py
+│           ├── main.py
+│           └── my_module.py
+└── pyproject.toml
+
+
 
 
 # Contributing
