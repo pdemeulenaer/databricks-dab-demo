@@ -125,8 +125,22 @@ The structure of the repo should follow something like this:
 │           └── my_module.py
 └── pyproject.toml
 
+Also the following block needs to be in databricks.yml:
 
+```yaml
+artifacts:
+  default:
+    type: whl
+    build: poetry build
+    path: .
+```
 
+As well, in addition to all classical attributes in the pyproject.toml file, we also need to declare the entry points for the DAB tasks, like this:
+
+```toml
+[tool.poetry.scripts]
+data_extraction="databricks_dab_demo.data_pipeline.task1:main"
+```
 
 # Contributing
 After making changes to this repos, run
