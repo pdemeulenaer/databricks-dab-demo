@@ -14,7 +14,7 @@ authors = [
     {name = "pdemeulenaer",email = "pdemeulenaer@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.12,<4.0"
+requires-python = ">=3.11,<4.0"
 dependencies = [
     "python-dotenv (==1.0.1)",
     "black (==24.4.2)",
@@ -32,6 +32,8 @@ dependencies = [
     "mlflow (==2.16.2)",
     "datasets (==3.2.0)",
     "databricks-connect (==13.3.2)",
+    "numpy (>=2.2.2,<3.0.0)",
+    "pandas (>=2.2.3,<3.0.0)",
 ]
 
 
