@@ -1,7 +1,39 @@
 repos:
-  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.4.2
+  - repo: local
+    # to be able to use these 'local' hooks, you need to install them first: poetry install --with dev
+    # and of course have the package(s) in your pyproject.toml, e.g. ruff, bandit.  
     hooks:
       - id: black
-        language_version: python3.10
+        name: black
+        entry: poetry run black
+        language: system
+        types: [python]
+      - id: nbstripout
+        name: nbstripout
+        entry: nbstripout
+        language: system
+        types: [jupyter]        
+      - id: ruff
+        name: ruff
+        description: "Run 'ruff' for extremely fast Python linting"
+        entry: poetry run ruff check --force-exclude --fix --no-cache
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+        additional_dependencies: []
+        minimum_pre_commit_version: "2.9.2"      
+      # - id: bandit
+      #   name: bandit
+      #   entry: bandit
+      #   language: python
+      #   files: ^package
+      #   args: ["-c", "package/pyproject.toml"]
+      #   additional_dependencies: ["bandit[toml]"]         
+
+# repos:
+#   Using this mirror lets us use mypyc-compiled black, which is about 2x faster
+#   - repo: https://github.com/psf/black-pre-commit-mirror
+#     rev: 24.4.2
+#     hooks:
+#       - id: black
+#         language_version: python3.10
