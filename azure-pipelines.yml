@@ -40,12 +40,12 @@ stages:
           displayName: 'Checkout & Build.Reason: $(Build.Reason) & Build.SourceBranchName: $(Build.SourceBranchName)'
 
         - task: UsePythonVersion@0
-          displayName: 'Use Python 3.10'
+          displayName: 'Use Python 3.11'
           inputs:
-            versionSpec: 3.10
+            versionSpec: 3.11
 
-        - bash: echo "##vso[task.prependpath]$CONDA/bin"
-          displayName: Add conda to PATH
+        # - bash: echo "##vso[task.prependpath]$CONDA/bin"
+        #   displayName: Add conda to PATH
 
         - script: |
             echo $(Build.BuildNumber) > build_version.txt
@@ -54,17 +54,29 @@ stages:
         - script: |
             conda init bash
 
+        # - script: |
+        #     conda env create --file environment.yml
+        #     source /usr/share/miniconda/etc/profile.d/conda.sh
+        #     conda activate $(condaEnvName)
+        #     python -m pip install --upgrade pip
+        #     pip install -r requirements.txt
+        #     pip install -e .
+        #     # make quality-ci
+        #     # mypy .
+        #     # pylint src/language_model_training
+        #   displayName: 'Install dependencies & check quality'
+
+        # Install Poetry
         - script: |
-            conda env create --file environment.yml
-            source /usr/share/miniconda/etc/profile.d/conda.sh
-            conda activate $(condaEnvName)
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-            pip install -e .
-            # make quality-ci
-            # mypy .
-            # pylint src/language_model_training
-          displayName: 'Install dependencies & check quality'
+            curl -sSL https://install.python-poetry.org | python3 -
+            export PATH="$HOME/.local/bin:$PATH"
+            poetry --version
+          displayName: 'Install Poetry'
+
+        # Install packages with Poetry 
+        - script: |
+            poetry install
+          displayName: 'Install packages with Poetry'           
 
         # - script: |
         #     pip install wheel
@@ -111,11 +123,23 @@ stages:
           clean: true
           displayName: 'Checkout & Build.Reason: $(Build.Reason) & Build.SourceBranchName: $(Build.SourceBranchName)'  
 
+        - task: UsePythonVersion@0
+          displayName: 'Use Python 3.11'
+          inputs:
+            versionSpec: 3.11
+
         # Install Databricks CLI (not in venv)
         - script: |
             curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
             databricks version
           displayName: 'Install Databricks CLI and get its version'                           
+
+        # Install Poetry
+        - script: |
+            curl -sSL https://install.python-poetry.org | python3 -
+            export PATH="$HOME/.local/bin:$PATH"
+            poetry --version
+          displayName: 'Install Poetry' 
             
         # Deploy bundle to dev
         - script: |       
@@ -139,11 +163,23 @@ stages:
           clean: true
           displayName: 'Checkout & Build.Reason: $(Build.Reason) & Build.SourceBranchName: $(Build.SourceBranchName)'  
 
+        - task: UsePythonVersion@0
+          displayName: 'Use Python 3.11'
+          inputs:
+            versionSpec: 3.11
+
         # Install Databricks CLI (not in venv)
         - script: |
             curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
             databricks version
           displayName: 'Install Databricks CLI and get its version'                           
+
+        # Install Poetry
+        - script: |
+            curl -sSL https://install.python-poetry.org | python3 -
+            export PATH="$HOME/.local/bin:$PATH"
+            poetry --version
+          displayName: 'Install Poetry' 
             
         # Deploy bundle to staging
         - script: |       
