@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 120
-target-version = ['py310']
+target-version = ['py311']
 include = '\.pyi?$'
 
 [tool.pylint.'MESSAGES CONTROL']
@@ -49,3 +49,36 @@ data_extraction="databricks_dab_demo.data_pipeline.task1:main"
 data_visualization="databricks_dab_demo.data_pipeline.task2:main"
 training="databricks_dab_demo.model.train:main"
 evaluation="databricks_dab_demo.model.evaluate:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+black = "^25.1.0"
+ruff = "^0.9.6"
+mypy = "^1.15.0"
+pre-commit = "^4.1.0"
+bandit = { version = "^1.7.6", extras = ["toml"] }
+pytest-mock = "^3.14.0"
+pytest-cov = "^6.0.0"
+isort = "^6.0.0"
+nbstripout = "^0.8.1"
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+python_files = "test_*.py *_test.py Test*.py *Test.py"
+python_classes = "*Test Test"
+markers = ["spark"]
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+disallow_untyped_calls = "true"
+disallow_untyped_defs = "true"
+disallow_incomplete_defs = "true"
+check_untyped_defs = "true"
+no_implicit_optional = "true"
+warn_redundant_casts = "true"
+ignore_missing_imports = "true"
+
+[tool.ruff]
+exclude = [
+    "*/notebooks/*",
+]
