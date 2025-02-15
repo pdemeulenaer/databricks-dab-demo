@@ -2,8 +2,7 @@ import os
 import re
 import pandas as pd
 from typing import Optional, Dict, Any, Tuple
-import logging
-from typing import Union, Dict
+from typing import Union
 from datasets import Dataset
 
 # import torch
@@ -110,7 +109,7 @@ def runs_on_databricks() -> bool:
           that the code is not running on Databricks.
     """
     try:
-        dbutils = get_dbutils()
+        _ = get_dbutils()
         return "DATABRICKS_RUNTIME_VERSION" in os.environ
     except ImportError:
         return False
