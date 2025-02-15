@@ -17,10 +17,10 @@ repos:
         name: ruff
         description: "Run 'ruff' for extremely fast Python linting"
         entry: poetry run ruff check --force-exclude --fix --no-cache
-        language: system
+        language: python
         types_or: [python, pyi]
         require_serial: true
-        additional_dependencies: []
+        additional_dependencies: ["ruff==0.9.6"]
         minimum_pre_commit_version: "2.9.2"      
       # - id: bandit
       #   name: bandit
