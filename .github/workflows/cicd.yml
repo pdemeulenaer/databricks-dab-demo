@@ -128,11 +128,11 @@ jobs:
           name: databricks-cli
           path: /usr/local/bin/databricks
 
-      - name: Ensure Databricks CLI is executable
-        run: |
-          chmod +x /usr/local/bin/databricks/bin/databricks
-          echo "/usr/local/bin/databricks/bin" >> $GITHUB_PATH
-          databricks version
+      # - name: Ensure Databricks CLI is executable
+      #   run: |
+      #     chmod +x /usr/local/bin/
+      #     echo "/usr/local/bin/" >> $GITHUB_PATH
+      #     databricks version
 
       - name: Deploy Databricks Bundle
         env:
