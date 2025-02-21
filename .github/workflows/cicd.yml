@@ -42,8 +42,8 @@ jobs:
       - name: Install Project Dependencies
         run: |
           poetry install --no-root # to avoid installing the project itself as a package (useful if you're just setting up dependencies)
-        env:
-          PATH: "${{ github.workspace }}/.venv/bin:$HOME/.local/bin:${{ env.PATH }}"          
+        # env:
+        #   PATH: "${{ github.workspace }}/.venv/bin:$HOME/.local/bin:${{ env.PATH }}"          
 
   test:
     if: github.event_name == 'pull_request'
