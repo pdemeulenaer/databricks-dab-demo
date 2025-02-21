@@ -103,20 +103,23 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Cache Poetry dependencies
+      - name: Restore Poetry and dependencies from cache
         uses: actions/cache@v3
         with:
-          path: ~/.virtualenvs
+          path: |
+            ~/.virtualenvs
+            ~/.local/bin  # Restore Poetry binary
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
-
-      - name: Install Poetry
+  
+      - name: Ensure Poetry is available
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-        env:
-          POETRY_VERSION: 2.1.1
+          poetry --version  # Verify Poetry is restored
+          # Install dependencies only if cache missed
+          poetry install --no-root --no-interaction || true  # Ignore failure if already installed
+  
 
       - name: Install Project Dependencies (if cache miss)
         run: |
@@ -131,7 +134,7 @@ jobs:
       - name: Ensure Databricks CLI is executable
         run: |
           chmod +x /usr/local/bin/databricks
-          echo "/usr/local/bin/" >> $GITHUB_PATH
+          echo "/usr/local/bin/databricks" >> $GITHUB_PATH
           databricks version
 
       - name: Deploy Databricks Bundle
