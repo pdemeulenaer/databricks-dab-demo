@@ -33,13 +33,13 @@ jobs:
         with:
           python-version: '3.11'        
 
-      - name: Cache Poetry dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.virtualenvs
-          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-poetry-
+      # - name: Cache Poetry dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.virtualenvs
+      #     key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-poetry-
 
       - name: Install Poetry
         run: |
@@ -58,15 +58,15 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
           databricks version
-          # Debug: Verify the installation path
-          # ls -la $HOME/.databricks 
-          ls -la /usr/local/bin/databricks         
+          # # Debug: Verify the installation path
+          # # ls -la $HOME/.databricks 
+          # ls -la /usr/local/bin/databricks         
 
-      - name: Upload Databricks CLI as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: databricks-cli
-          path: /usr/local/bin/databricks
+      # - name: Upload Databricks CLI as artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: databricks-cli
+      #     path: /usr/local/bin/databricks
 
       - name: Validate Databricks bundle
         env:
@@ -103,39 +103,47 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Restore Poetry and dependencies from cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.virtualenvs
-            ~/.local/bin  # Restore Poetry binary
-          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-poetry-
+      # - name: Restore Poetry and dependencies from cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.virtualenvs
+      #       ~/.local/bin  # Restore Poetry binary
+      #     key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-poetry-
   
-      - name: Ensure Poetry is available
-        run: |
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          poetry --version  # Verify Poetry is restored
-          # Install dependencies only if cache missed
-          poetry install --no-root --no-interaction || true  # Ignore failure if already installed
+      # - name: Ensure Poetry is available
+      #   run: |
+      #     echo "$HOME/.local/bin" >> $GITHUB_PATH
+      #     poetry --version  # Verify Poetry is restored
+      #     # Install dependencies only if cache missed
+      #     poetry install --no-root --no-interaction || true  # Ignore failure if already installed
   
 
-      - name: Install Project Dependencies (if cache miss)
+      - name: Install Poetry
         run: |
-          poetry install --no-root --no-interaction
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "POETRY_HOME=$HOME/.local/bin" >> $GITHUB_ENV
+        env:
+          POETRY_VERSION: 2.1.1  
 
-      - name: Download Databricks CLI artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: databricks-cli
-          path: /usr/local/bin/databricks
+      # - name: Download Databricks CLI artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: databricks-cli
+      #     path: /usr/local/bin/databricks
 
-      - name: Ensure Databricks CLI is executable
+      # - name: Ensure Databricks CLI is executable
+      #   run: |
+      #     chmod +x /usr/local/bin/databricks
+      #     echo "/usr/local/bin/databricks" >> $GITHUB_PATH
+      #     databricks version
+
+      - name: Install Databricks CLI (not in venv)
         run: |
-          chmod +x /usr/local/bin/databricks
-          echo "/usr/local/bin/databricks" >> $GITHUB_PATH
-          databricks version
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
+          databricks version      
 
       - name: Deploy Databricks Bundle
         env:
