@@ -58,12 +58,14 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
           databricks version
+          # Debug: Verify the installation path
+          ls -la $HOME/.databricks          
 
       - name: Upload Databricks CLI as artifact
         uses: actions/upload-artifact@v4
         with:
           name: databricks-cli
-          path: /home/runner/.databricks-cli
+          path: /home/runner/.databricks
 
       - name: Validate Databricks bundle
         env:
@@ -123,12 +125,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: databricks-cli
-          path: /home/runner/.databricks-cli
+          path: /home/runner/.databricks
 
       - name: Ensure Databricks CLI is executable
         run: |
-          chmod +x /home/runner/.databricks-cli/bin/databricks
-          echo "/home/runner/.databricks-cli/bin" >> $GITHUB_PATH
+          chmod +x /home/runner/.databricks/bin/databricks
+          echo "/home/runner/.databricks/bin" >> $GITHUB_PATH
           databricks version
 
       - name: Deploy Databricks Bundle
