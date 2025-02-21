@@ -58,8 +58,7 @@ jobs:
         run: |
           databricks bundle validate
       
-         
-        
+                 
   test:
     if: github.event_name == 'pull_request'
     needs: build
