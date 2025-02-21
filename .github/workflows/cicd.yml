@@ -59,7 +59,8 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
           databricks version
           # Debug: Verify the installation path
-          ls -la $HOME/.databricks          
+          # ls -la $HOME/.databricks 
+          ls -la /usr/local/bin/databricks         
 
       - name: Upload Databricks CLI as artifact
         uses: actions/upload-artifact@v4
