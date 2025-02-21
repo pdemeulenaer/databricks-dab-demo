@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: databricks-cli
-          path: /home/runner/.databricks
+          path: /usr/local/bin/databricks
 
       - name: Validate Databricks bundle
         env:
@@ -125,12 +125,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: databricks-cli
-          path: /home/runner/.databricks
+          path: /usr/local/bin/databricks
 
       - name: Ensure Databricks CLI is executable
         run: |
-          chmod +x /home/runner/.databricks/bin/databricks
-          echo "/home/runner/.databricks/bin" >> $GITHUB_PATH
+          chmod +x /usr/local/bin/databricks/bin/databricks
+          echo "/usr/local/bin/databricks/bin" >> $GITHUB_PATH
           databricks version
 
       - name: Deploy Databricks Bundle
