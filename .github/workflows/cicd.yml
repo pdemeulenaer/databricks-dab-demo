@@ -45,6 +45,16 @@ jobs:
         # env:
         #   PATH: "${{ github.workspace }}/.venv/bin:$HOME/.local/bin:${{ env.PATH }}"          
 
+      - name: Install Databricks CLI (not in venv)
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
+          databricks version
+
+      - name: Validate Databricks bundle
+        run: |
+          databricks bundle validate
+         
+        
   test:
     if: github.event_name == 'pull_request'
     needs: build
@@ -52,6 +62,7 @@ jobs:
     steps:
       - name: Run Tests
         run: echo "Running tests..."
+
 
   deploy-dev:
     if: github.event_name == 'pull_request'
@@ -63,6 +74,7 @@ jobs:
       - name: Deploy
         run: echo "Deploying..."
 
+        
   deploy-production:
     if: github.event_name == 'pull_request'
     needs: deploy-dev
