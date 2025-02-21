@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - 'feature/**'  # Runs build job on any feature/* branch push
+      - main  # only for testing, disable this
     paths:
       - 'src/**'
       - '.github/workflows/**'
       - 'databricks.yml'
       - 'resources/*.yml'
-      - 'requirements*'
-      - 'setup.py'      
+      - 'poetry.lock'
+      - 'pyproject.toml'      
   pull_request:
     branches:
       - main  # Runs build, test, and deploy jobs on pull request to main branch
@@ -25,6 +26,24 @@ jobs:
 
       - name: Build Project
         run: echo "Building the project..."
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'        
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "POETRY_HOME=$HOME/.local/bin" >> $GITHUB_ENV
+        env:
+          POETRY_VERSION: 2.1.1      
+          
+      - name: Install Project Dependencies
+        run: |
+          poetry install --no-root # to avoid installing the project itself as a package (useful if you're just setting up dependencies)
+        env:
+          PATH: "${{ github.workspace }}/.venv/bin:$HOME/.local/bin:${{ env.PATH }}"          
 
   test:
     if: github.event_name == 'pull_request'
