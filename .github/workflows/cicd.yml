@@ -33,6 +33,14 @@ jobs:
         with:
           python-version: '3.11'        
 
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
@@ -51,6 +59,12 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
           databricks version
 
+      - name: Upload Databricks CLI as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: databricks-cli
+          path: /home/runner/.databricks-cli
+
       - name: Validate Databricks bundle
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
@@ -59,32 +73,94 @@ jobs:
           databricks bundle validate
       
                  
-  test:
-    if: github.event_name == 'pull_request'
-    needs: build
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-      - name: Run Tests
-        run: echo "Running tests..."
+  # test:
+  #   if: github.event_name == 'push' || github.event_name == 'pull_request'
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   environment: development
+  #   steps:
+  #     - name: Run Tests
+  #       run: echo "Running tests..."
 
 
   deploy-dev:
-    if: github.event_name == 'pull_request'
-    needs: test
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    needs: build # test
     runs-on: ubuntu-latest
     environment: development
     steps:
       - name: Deploy
         run: echo "Deploying..."
 
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-  deploy-production:
-    if: github.event_name == 'pull_request'
-    needs: deploy-dev
-    runs-on: ubuntu-latest
-    environment: production
-      # Requires approval for 'production' environment
-    steps:
-      - name: Deploy
-        run: echo "Deploying..."        
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+        env:
+          POETRY_VERSION: 2.1.1
+
+      - name: Install Project Dependencies (if cache miss)
+        run: |
+          poetry install --no-root --no-interaction
+
+      - name: Download Databricks CLI artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: databricks-cli
+          path: /home/runner/.databricks-cli
+
+      - name: Ensure Databricks CLI is executable
+        run: |
+          chmod +x /home/runner/.databricks-cli/bin/databricks
+          echo "/home/runner/.databricks-cli/bin" >> $GITHUB_PATH
+          databricks version
+
+      - name: Deploy Databricks Bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks bundle deploy
+
+
+
+  # deploy-production:
+  #   if: github.event_name == 'pull_request'
+  #   needs: deploy-dev
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #     # Requires approval for 'production' environment
+  #   steps:
+  #     - name: Deploy
+  #       run: echo "Deploying..."   
+        
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v2
+
+  #     - name: Install Databricks CLI
+  #       run: |
+  #         curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh   
+  #         databricks version
+
+  #     - name: Deploy Databricks Bundle
+  #       env:
+  #         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+  #         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+  #       run: |
+  #         databricks bundle deploy        
